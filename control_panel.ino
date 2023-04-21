@@ -336,7 +336,7 @@ void loop() {
       }
 
       // Functie
-      if (digitalRead(functie) == LOW && estopped == false) {
+      if (digitalRead(functie1) == LOW && estopped == false) {
         functieReturn();
       }
 
