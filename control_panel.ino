@@ -204,22 +204,22 @@ void processLights() {
       // De enter toets kan niet bedrukt worden
       digitalWrite(functionl, LOW);
     }
+  }
 
-    if (estopped) {
-      // Welke mongool heeft de estop aangeraakt?
-      digitalWrite(resetl, ledState);
-    } else {
-      // Joepie we mogen weer
-      digitalWrite(resetl, LOW);
-    }
+  if (estopped) {
+    // Welke mongool heeft de estop aangeraakt?
+    digitalWrite(resetl, ledState);
+  } else {
+    // Joepie we mogen weer
+    digitalWrite(resetl, LOW);
+  }
 
-    if ((gatesError + restraintsError + dispatchError) > 0) {
-      // Reset aanzetten
-      digitalWrite(resetl, ledState);
-    } else {
-      // Weer veilig
-      digitalWrite(resetl, LOW);
-    }
+  if ((gatesError + restraintsError + dispatchError) > 0) {
+    // Reset aanzetten
+    digitalWrite(resetl, ledState);
+  } else {
+    // Weer veilig
+    digitalWrite(resetl, LOW);
   }
 }
 
