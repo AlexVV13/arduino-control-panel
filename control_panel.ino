@@ -1,20 +1,20 @@
 #include <Keyboard.h>
 
-// De knopjes zelf
+// Knopjes
+const int power = 13;
 const int dis1 = 2;
 const int dis2 = 3;
 const int gates = 4;
 const int restraints = 5;
 const int estop = 6;
 const int reset = 7;
-const int functie = 8;
-const int power = 9;
-
+const int functie1 = 8;
+ 
 // Lampjes
-const int disl1 = 10;
-const int disl2 = 11;
+const int disl1 = 9;
+const int disl2 = 10;
+const int resetl = 11;
 const int functionl = 12;
-const int resetl = 13;
 
 // Mogelijke opties
 bool gatesOpen = false;
@@ -270,6 +270,18 @@ void loop() {
   currentMillis = millis();
   // Zonder power switch gaat niks moeten werken
   if (digitalRead(power) == LOW) { 
+      if (!lightTest) {
+        digitalWrite(disl1, HIGH);
+        digitalWrite(disl2, HIGH);
+        digitalWrite(resetl, HIGH);
+        digitalWrite(functionl, HIGH);
+        delay(1000);
+        digitalWrite(disl1, LOW);
+        digitalWrite(disl2, LOW);
+        digitalWrite(resetl, LOW);
+        digitalWrite(functionl, LOW);
+      lightTest = true;
+      }
       // Zet het toetsenbord aan
       if (keyboardState == false) {
           Serial.begin(9600);
@@ -290,28 +302,28 @@ void loop() {
       }
 
       // Open poortjes
-      if (digitalRead(gates) == LOW && gatesOpen == false && trainParked) {
+      if (digitalRead(gates) == HIGH && gatesOpen == false && trainParked) {
         openGates();
       } else {
         gatesError = 1;
       }
 
       // Sluit poortjes
-      if (digitalRead(gates) == HIGH && gatesOpen && trainParked) {
+      if (digitalRead(gates) == LOW && gatesOpen && trainParked) {
         closeGates();
       } else {
         gatesError = 1;
       }
 
       // Open beugels
-      if (digitalRead(restraints) == LOW && !resOpen && trainParked) {
+      if (digitalRead(restraints) == HIGH && !resOpen && trainParked) {
         openRestraints();
       } else {
         restraintsError = 1;
       }
 
       // Sluit beugels
-      if (digitalRead(restraints) == HIGH && resOpen && trainParked) {
+      if (digitalRead(restraints) == LOW && resOpen && trainParked) {
         closeRestraints();
       } else {
         restraintsError = 1;
