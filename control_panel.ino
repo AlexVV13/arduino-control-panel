@@ -59,7 +59,7 @@ void setup() {
   pinMode(restraints, INPUT_PULLUP);
   pinMode(estop, INPUT_PULLUP);
   pinMode(reset, INPUT_PULLUP);
-  pinMode(functie, INPUT_PULLUP);
+  pinMode(functie1, INPUT_PULLUP);
   pinMode(power, INPUT_PULLUP);
 
   // En ook de lampjes
