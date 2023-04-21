@@ -25,6 +25,7 @@ bool canMoveGatesRestraints = true;
 bool canStartAdv = true;
 bool trainParked = true;
 bool keyboardState = false;
+bool lightTest = false;
 
 // Wat doen de poortjes en beugels?
 int gatesMotionDirection = 0;
@@ -352,5 +353,6 @@ void loop() {
       }
       // Zet de lampjes uit :/
       lightsOut();
+      lightTest = false;
   }
 }
