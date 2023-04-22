@@ -83,6 +83,7 @@ void emergency() {
   Keyboard.releaseAll();
  
   estopped = true;
+  digitalWrite(resetl, HIGH);
   digitalWrite(dis1l, LOW);
   digitalWrite(dis2l, LOW);
   Serial.write("E-STOPPED\n");
