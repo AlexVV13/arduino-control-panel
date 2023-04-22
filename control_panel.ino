@@ -211,7 +211,7 @@ void loop() {
         dispatch();
         delay(1000);
       } else {
- 
+        systemError = true;
       }
     }
  
@@ -234,7 +234,7 @@ void loop() {
   if (digitalRead(gates) == LOW && gatesOpen == true) {
     closeGates();
   } else {
-    systemError = true
+    systemError = true;
   }
  
   // Beugels
