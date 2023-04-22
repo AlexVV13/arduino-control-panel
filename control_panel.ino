@@ -17,31 +17,30 @@ const int resetl = 11;
 const int functionl = 12;
  
 // Opties
-bool gatesOpen = false;
-bool resOpen = false;
-bool estopped = false;
-bool canDispatch = true;
-bool trainParked = true;
-bool lightTest = false;
-bool enableStationCTRL = true;
+bool gatesOpen = false; // Poortjes zijn dicht
+bool resOpen = false; // Beugels zijn dicht
+bool estopped = false; // Zou t raar vinden als ie ge estopped begint?
+bool canDispatch = true; // Zie onderstaand
+bool trainParked = true; // Je begint altijd met trein in dispatch modus
+bool lightTest = false; // Bij true zou de lamptest al gedaan zijn
+bool enableStationCTRL = true; // NOOIT OP FALSE ZETTEN
 bool systemError = false; // Als je deze aan zou zetten zou je moeten beginnen met een reset
 bool keyboardState = false;
 bool preLoad = true; // In principe zou je vanaf het begin meteen moeten kunnen preloaden
  
 // Dispatch
-const long DispatchDelay = 10000;
+const long DispatchDelay = 10000; // 10 seconden voor de trein weer vrijgegeven kan worden
 unsigned long DispatchStartTime = 0;
 
 // PreLoad
-const long PreLoadDelay = 10000;
+const long PreLoadDelay = 10000; // 10 seconden tussen enter functies
 unsigned long PreLoadStartTime = 0;
  
 // Ledjes
 unsigned long currentMillis;
 unsigned long previousBlinkMillis = 0;
-const long blinkInterval = 500;
-const long estopInterval = 250;
-int ledState = LOW;
+const long blinkInterval = 500; // led interval, 25ms is fury, 500 is normaal
+int ledState = LOW; // Led begint altijd uit
  
 void setup() {
   // Pins knopjes
@@ -155,6 +154,7 @@ void closeRestraints() {
   Keyboard.releaseAll();
 }
 
+// Controleer de statussen van de knoppen, en zet timers na vrijgaves en functiekeys
 void updateStates() {
   // Dispatch
   if ((currentMillis - DispatchStartTime >= DispatchDelay) || DispatchStartTime == 0) {
@@ -205,7 +205,7 @@ void updateLights() {
     digitalWrite(dis1l, LOW);
     digitalWrite(dis2l, LOW);
   }
-  // Knipperende LED reset -- Knipper bij zowel estop als fault
+  // Knipperende LED reset -- Enkelt bij fault, estop gaat vanzelf en brandt CONSTANT
   if (systemError) {
     digitalWrite(resetl, ledState);
   } else {
