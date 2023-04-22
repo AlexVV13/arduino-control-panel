@@ -104,7 +104,7 @@ void emergency() {
 void dispatch() {
   Keyboard.press(' ');
   Serial.write("DISPATCHED");
-  delay(2000);
+  delay(5000);
   Keyboard.releaseAll();
   trainParked = false;
   DispatchStartTime = currentMillis;
@@ -114,7 +114,7 @@ void dispatch() {
 void functie() {
   Keyboard.press(KEY_RETURN);
   Serial.write("ADVANCED");
-  delay(2000);
+  delay(1000);
   Keyboard.releaseAll();
   preLoad = false;
   PreLoadStartTime = currentMillis;
