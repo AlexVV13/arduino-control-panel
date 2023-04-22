@@ -83,7 +83,6 @@ void emergency() {
   Keyboard.releaseAll();
  
   estopped = true;
-  digitalWrite(resetl, HIGH);
   digitalWrite(dis1l, LOW);
   digitalWrite(dis2l, LOW);
   Serial.write("E-STOPPED\n");
@@ -167,11 +166,13 @@ void updateLights() {
       ledState = LOW;
     }
   }
+  // Knipperende LED functie
   if (preLoad && !estopped) {
     digitalWrite(functionl, ledState);
   } else {
     digitalWrite(functionl, LOW);
   }
+  // Knipperende LED dispatch
   if (canDispatch && !resOpen && !gatesOpen && !estopped && trainParked && !systemError) {
     digitalWrite(dis1l, ledState);
     digitalWrite(dis2l, ledState);
@@ -179,7 +180,8 @@ void updateLights() {
     digitalWrite(dis1l, LOW);
     digitalWrite(dis2l, LOW);
   }
-  if (systemError) {
+  // Knipperende LED reset -- Knipper bij zowel estop als fault
+  if (systemError || estopped) {
     digitalWrite(resetl, ledState);
   } else {
     digitalWrite(resetl, LOW);
@@ -278,6 +280,7 @@ void loop() {
     if (keyboardState) {
       Keyboard.end();
       keyboardState = false;
+      Serial.end();
     }
     digitalWrite(dis1l, LOW);
     digitalWrite(dis2l, LOW);
