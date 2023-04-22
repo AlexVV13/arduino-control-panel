@@ -232,7 +232,7 @@ void updateErrorLight() {
   }
   // Knipperende LED reset -- Enkelt bij fault, estop gaat vanzelf en brandt CONSTANT
   if (systemError) {
-    digitalWrite(resetl, ledState);
+    digitalWrite(resetl, errorLed);
   } else {
     digitalWrite(resetl, LOW);
   }
@@ -249,7 +249,7 @@ void updateFNCLight() {
   }
   // Knipperende LED functie
   if (preLoad && !estopped) {
-    digitalWrite(functionl, ledState);
+    digitalWrite(functionl, fncLed);
   } else {
     digitalWrite(functionl, LOW);
   }
