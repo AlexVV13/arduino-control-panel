@@ -236,7 +236,7 @@ void loop() {
     if (gatesOpen == false && trainParked) {
       openGates();
     } else {
-      systemError = true;
+      // systemError = true;
     }
   }
  
@@ -244,7 +244,7 @@ void loop() {
     if (gatesOpen == true && trainParked) {
       closeGates();
     } else {
-      systemError = true;
+      // systemError = true;
     }
   }
  
@@ -253,7 +253,7 @@ void loop() {
     if (resOpen == false && trainParked) {
       openRestraints();
     } else {
-      systemError = true;
+      // systemError = true;
     }
   }
  
@@ -261,7 +261,7 @@ void loop() {
     if (resOpen == true && trainParked) {
       closeRestraints();
     } else {
-      systemError = true;
+      // systemError = true;
     }
   }
  
