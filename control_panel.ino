@@ -23,6 +23,7 @@ bool estopped = false;
 bool canDispatch = true;
 bool trainParked = true;
 bool lightTest = false;
+bool enableStationCTRL = true;
 bool systemError = false; // Als je deze aan zou zetten zou je moeten beginnen met een reset
 bool keyboardState = false;
 bool preLoad = true; // In principe zou je vanaf het begin meteen moeten kunnen preloaden
@@ -125,7 +126,6 @@ void openGates() {
   Serial.write("OPEN GATES\n");
   Keyboard.press(KEY_RIGHT_ARROW);
   gatesOpen = true;
-  canDispatch = false;
   delay(2000);
   Keyboard.releaseAll();
 }
@@ -134,7 +134,6 @@ void closeGates() {
   Serial.write("CLOSE GATES\n");
   Keyboard.press(KEY_LEFT_ARROW);
   gatesOpen = false;
-  canDispatch = true;
   delay(2000);
   Keyboard.releaseAll();
 }
@@ -144,7 +143,6 @@ void openRestraints() {
   Serial.write("OPEN RESTRAINTS\n");
   Keyboard.press(KEY_UP_ARROW);
   resOpen = true;
-  canDispatch = false;
   delay(1000);
   Keyboard.releaseAll();
 }
@@ -153,7 +151,6 @@ void closeRestraints() {
   Serial.write("CLOSE RESTRAINTS\n");
   Keyboard.press(KEY_DOWN_ARROW);
   resOpen = false;
-  canDispatch = true;
   delay(1000);
   Keyboard.releaseAll();
 }
@@ -167,6 +164,20 @@ void updateStates() {
   // PreLoad
   if ((currentMillis - PreLoadStartTime >= PreLoadDelay) || PreLoadStartTime == 0) {
     preLoad = true;
+  }
+
+  // Controleer of er gedispatcht kan worden
+  if (!resOpen && !estopped && !gatesOpen && trainParked && !systemError) {
+    canDispatch = true;
+  } else {
+    canDispatch = false;
+  }
+
+  // Controleer of er beugels en poortjes open kunnen
+  if (trainParked) {
+    enableStationCTRL = true;
+  } else {
+    enableStationCTRL = false;
   }
 }
 
@@ -187,7 +198,7 @@ void updateLights() {
     digitalWrite(functionl, LOW);
   }
   // Knipperende LED dispatch
-  if (canDispatch && !resOpen && !gatesOpen && !estopped && trainParked && !systemError) {
+  if (canDispatch) {
     digitalWrite(dis1l, ledState);
     digitalWrite(dis2l, ledState);
   } else {
@@ -195,7 +206,7 @@ void updateLights() {
     digitalWrite(dis2l, LOW);
   }
   // Knipperende LED reset -- Knipper bij zowel estop als fault
-  if (systemError || estopped) {
+  if (systemError) {
     digitalWrite(resetl, ledState);
   } else {
     digitalWrite(resetl, LOW);
@@ -229,7 +240,7 @@ void loop() {
     }
     // Dispatch
     if (digitalRead(dis1) == LOW && digitalRead(dis2) == LOW) {
-      if (!gatesOpen && !resOpen && !estopped && !systemError) {
+      if (canDispatch) {
         dispatch();
         delay(1000);
       } else {
@@ -250,16 +261,16 @@ void loop() {
   if (digitalRead(gates) == HIGH) {
     if (gatesOpen == false && trainParked) {
       openGates();
-    } else {
-      // systemError = true;
+    } else if (!enableStationCTRL) {
+      systemError = true;
     }
   }
  
   if (digitalRead(gates) == LOW) {
     if (gatesOpen == true && trainParked) {
       closeGates();
-    } else {
-      // systemError = true;
+    } else if (!enableStationCTRL) {
+      systemError = true;
     }
   }
  
@@ -267,16 +278,16 @@ void loop() {
   if (digitalRead(restraints) == HIGH) {
     if (resOpen == false && trainParked) {
       openRestraints();
-    } else {
-      // systemError = true;
+    } else if (!enableStationCTRL) {
+      systemError = true;
     }
   }
  
   if (digitalRead(restraints) == LOW) {
     if (resOpen == true && trainParked) {
       closeRestraints();
-    } else {
-      // systemError = true;
+    } else if (!enableStationCTRL) {
+      systemError = true;
     }
   }
  
