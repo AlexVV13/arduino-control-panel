@@ -27,14 +27,23 @@ bool enableStationCTRL = true; // NOOIT OP FALSE ZETTEN
 bool systemError = false; // Als je deze aan zou zetten zou je moeten beginnen met een reset
 bool keyboardState = false;
 bool preLoad = true; // In principe zou je vanaf het begin meteen moeten kunnen preloaden
+bool blockClear = true; // Kan je vrijgeven?
+bool dispressed = false;
  
 // Dispatch
-const long DispatchDelay = 10000; // 10 seconden voor de trein weer vrijgegeven kan worden
+const long DispatchDelay = 50000; // 10 seconden voor de trein weer vrijgegeven kan worden
 unsigned long DispatchStartTime = 0;
+
+const long ADVDelay = 10000;
+unsigned long ADVStartTime = 0;
 
 // PreLoad
 const long PreLoadDelay = 10000; // 10 seconden tussen enter functies
 unsigned long PreLoadStartTime = 0;
+
+// Dispatch Press
+const long DispatchPress = 5000; // 5 seconden
+unsigned long DispatchPressStartTime = 0;
  
 // Ledjes
 unsigned long currentMillis;
@@ -106,8 +115,11 @@ void dispatch() {
   Serial.write("DISPATCHED");
   delay(5000);
   Keyboard.releaseAll();
+  // DispatchPressStartTime = currentMillis;
   trainParked = false;
+  blockClear = false;
   DispatchStartTime = currentMillis;
+  ADVStartTime = currentMillis;
 }
 
 // Functie/ advance
@@ -174,6 +186,11 @@ void closeRestraints() {
 void updateStates() {
   // Dispatch
   if ((currentMillis - DispatchStartTime >= DispatchDelay) || DispatchStartTime == 0) {
+    blockClear = true;
+  }
+
+  // Advance
+  if ((currentMillis - ADVStartTime >= ADVDelay) || ADVStartTime == 0) {
     trainParked = true;
   }
 
@@ -182,8 +199,21 @@ void updateStates() {
     preLoad = true;
   }
 
+  // PreLoad
+  if ((currentMillis - DispatchPressStartTime >= DispatchPress) || DispatchPressStartTime == 0) {
+    dispressed = false;
+  } else {
+    dispressed = true;
+  }
+
+  if (dispressed) {
+    Keyboard.press(' ');
+    Serial.write("DISPATCHED");
+    Keyboard.releaseAll();
+  }
+
   // Controleer of er gedispatcht kan worden
-  if (!resOpen && !estopped && !gatesOpen && trainParked && !systemError) {
+  if (!resOpen && !estopped && !gatesOpen && trainParked && !systemError && blockClear) {
     canDispatch = true;
   } else {
     canDispatch = false;
