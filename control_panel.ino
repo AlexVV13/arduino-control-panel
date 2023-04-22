@@ -66,7 +66,7 @@ void emergencyReset() {
   digitalWrite(resetl, LOW);
   Serial.write("RESETTING...\n");
   Keyboard.press(0x72);
-  delay(5000);
+  delay(6000);
   Serial.write("RESET!\n");
   Keyboard.releaseAll();
   delay(200);
@@ -114,7 +114,7 @@ void dispatch() {
 void functie() {
   Keyboard.press(KEY_RETURN);
   Serial.write("ADVANCED");
-  delay(1000);
+  delay(200);
   Keyboard.releaseAll();
   preLoad = false;
   PreLoadStartTime = currentMillis;
@@ -126,7 +126,7 @@ void openGates() {
     Serial.write("OPEN GATES\n");
     Keyboard.press(KEY_RIGHT_ARROW);
     gatesOpen = true;
-    delay(2000);
+    delay(200);
     Keyboard.releaseAll();
   } else {
     systemError = true;
@@ -138,7 +138,7 @@ void closeGates() {
     Serial.write("CLOSE GATES\n");
     Keyboard.press(KEY_LEFT_ARROW);
     gatesOpen = false;
-    delay(2000);
+    delay(200);
     Keyboard.releaseAll();
   } else {
     systemError = true;
@@ -151,7 +151,7 @@ void openRestraints() {
     Serial.write("OPEN RESTRAINTS\n");
     Keyboard.press(KEY_UP_ARROW);
     resOpen = true;
-    delay(1000);
+    delay(200);
     Keyboard.releaseAll();
   } else {
     systemError = true;
@@ -163,7 +163,7 @@ void closeRestraints() {
     Serial.write("CLOSE RESTRAINTS\n");
     Keyboard.press(KEY_DOWN_ARROW);
     resOpen = false;
-    delay(1000);
+    delay(200);
     Keyboard.releaseAll();
   } else {
     systemError = true;
@@ -273,7 +273,7 @@ void loop() {
 
   // Poortjes
   if (digitalRead(gates) == HIGH) {
-    if (gatesOpen == false && trainParked) {
+    if (gatesOpen == false) {
       openGates();
     }
   }
@@ -286,7 +286,7 @@ void loop() {
  
   // Beugels
   if (digitalRead(restraints) == HIGH) {
-    if (resOpen == false && trainParked) {
+    if (resOpen == false) {
       openRestraints();
     }
   }
