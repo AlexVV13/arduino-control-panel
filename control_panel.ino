@@ -232,7 +232,7 @@ void loop() {
   // Poortjes
   if (digitalRead(gates) == HIGH) {
     if (gatesOpen == false) {
-      openGates()
+      openGates();
     } else {
       systemError = true;
     }
@@ -240,7 +240,7 @@ void loop() {
  
   if (digitalRead(gates) == LOW) {
     if (gatesOpen == true) {
-      closeGates()
+      closeGates();
     } else {
       systemError = true;
     }
@@ -249,7 +249,7 @@ void loop() {
   // Beugels
   if (digitalRead(restraints) == HIGH) {
     if (resOpen == false) {
-      openRestraints()
+      openRestraints();
     } else {
       systemError = true;
     }
@@ -257,7 +257,7 @@ void loop() {
  
   if (digitalRead(restraints) == LOW) {
     if (resOpen == true) {
-      closeRestraints()
+      closeRestraints();
     } else {
       systemError = true;
     }
