@@ -230,29 +230,37 @@ void loop() {
   }
 
   // Poortjes
-  if (digitalRead(gates) == HIGH && gatesOpen == false) {
-    openGates();
-  } else {
-    systemError = true;
+  if (digitalRead(gates) == HIGH) {
+    if (gatesOpen == false) {
+      openGates()
+    } else {
+      systemError = true;
+    }
   }
  
-  if (digitalRead(gates) == LOW && gatesOpen == true) {
-    closeGates();
-  } else {
-    systemError = true;
+  if (digitalRead(gates) == LOW) {
+    if (gatesOpen == true) {
+      closeGates()
+    } else {
+      systemError = true;
+    }
   }
  
   // Beugels
-  if (digitalRead(restraints) == HIGH && resOpen == false) {
-    openRestraints();
-  } else {
-    systemError = true;
+  if (digitalRead(restraints) == HIGH) {
+    if (resOpen == false) {
+      openRestraints()
+    } else {
+      systemError = true;
+    }
   }
  
-  if (digitalRead(restraints) == LOW && resOpen == true) {
-    closeRestraints();
-  } else {
-    systemError = true;
+  if (digitalRead(restraints) == LOW) {
+    if (resOpen == true) {
+      closeRestraints()
+    } else {
+      systemError = true;
+    }
   }
  
   // E-stop
