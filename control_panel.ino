@@ -17,8 +17,8 @@ const int resetl = 11;
 const int functionl = 12;
  
 // Opties
-bool gatesOpen = true;
-bool resOpen = true;
+bool gatesOpen = false;
+bool resOpen = false;
 bool estopped = false;
 bool canDispatch = true;
 bool trainParked = true;
@@ -172,7 +172,7 @@ void updateLights() {
   } else {
     digitalWrite(functionl, LOW);
   }
-  if (canDispatch && !resOpen && !gatesOpen && !estopped && trainParked && !systemError) {
+  if (canDispatch && !resOpen && !gatesOpen && !estopped && trainParked) {
     digitalWrite(dis1l, ledState);
     digitalWrite(dis2l, ledState);
   } else {
