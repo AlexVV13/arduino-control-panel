@@ -102,8 +102,11 @@ void dispatch() {
   Serial.write("DISPATCHED");
   delay(5000);
   Keyboard.releaseAll();
+  dispatchDelayTimer();
+}
+
+void dispatchDelayTimer() {
   trainParked = false;
-  DispatchStartTime = currentMillis;
   delay(10000);
   trainParked = true;
 }
@@ -114,8 +117,12 @@ void functie() {
   Serial.write("ADVANCED");
   delay(5000);
   Keyboard.releaseAll();
+  advDelayTimer();
+}
+
+void advDelayTimer() {
   preLoad = false;
-  delay(10000); // Delay tussen staat van de knop
+  delay(10000);
   preLoad = true;
 }
  
