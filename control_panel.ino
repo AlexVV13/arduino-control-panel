@@ -224,7 +224,7 @@ void loop() {
  
   // Functie
   if (digitalRead(functie1) == LOW) {
-    if (!gatesOpen && !resOpen && !estopped) {
+    if (!estopped) {
       functie();
     } else {
       systemError = true;
@@ -233,7 +233,7 @@ void loop() {
 
   // Poortjes
   if (digitalRead(gates) == HIGH) {
-    if (gatesOpen == false) {
+    if (gatesOpen == false && trainParked) {
       openGates();
     } else {
       systemError = true;
@@ -241,7 +241,7 @@ void loop() {
   }
  
   if (digitalRead(gates) == LOW) {
-    if (gatesOpen == true) {
+    if (gatesOpen == true && trainParked) {
       closeGates();
     } else {
       systemError = true;
@@ -250,7 +250,7 @@ void loop() {
  
   // Beugels
   if (digitalRead(restraints) == HIGH) {
-    if (resOpen == false) {
+    if (resOpen == false && trainParked) {
       openRestraints();
     } else {
       systemError = true;
@@ -258,7 +258,7 @@ void loop() {
   }
  
   if (digitalRead(restraints) == LOW) {
-    if (resOpen == true) {
+    if (resOpen == true && trainParked) {
       closeRestraints();
     } else {
       systemError = true;
