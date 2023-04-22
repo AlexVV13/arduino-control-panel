@@ -268,8 +268,6 @@ void loop() {
   if (digitalRead(functie1) == LOW) {
     if (!estopped) {
       functie();
-    } else {
-      systemError = true;
     }
   }
 
