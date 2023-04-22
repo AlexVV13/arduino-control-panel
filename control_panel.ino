@@ -30,6 +30,10 @@ bool preLoad = true; // In principe zou je vanaf het begin meteen moeten kunnen 
 // Dispatch
 const long DispatchDelay = 5000;
 unsigned long DispatchStartTime = 0;
+
+// PreLoad
+const long PreLoadDelay = 5000;
+unsigned long PreLoadStartTime = 0;
  
 // Ledjes
 unsigned long currentMillis;
@@ -102,13 +106,8 @@ void dispatch() {
   Serial.write("DISPATCHED");
   delay(5000);
   Keyboard.releaseAll();
-  dispatchDelayTimer();
-}
-
-void dispatchDelayTimer() {
   trainParked = false;
-  delay(10000);
-  trainParked = true;
+  DispatchStartTime = currentMillis;
 }
 
 // Functie/ advance
@@ -117,13 +116,8 @@ void functie() {
   Serial.write("ADVANCED");
   delay(5000);
   Keyboard.releaseAll();
-  advDelayTimer();
-}
-
-void advDelayTimer() {
   preLoad = false;
-  delay(10000);
-  preLoad = true;
+  PreLoadStartTime = currentMillis;
 }
  
 // Poortjes
@@ -162,6 +156,18 @@ void closeRestraints() {
   canDispatch = true;
   delay(1000);
   Keyboard.releaseAll();
+}
+
+void updateStates() {
+  // Dispatch
+  if ((currentMillis - DispatchStartTime >= DispatchDelay) || DispatchStartTime == 0) {
+    trainParked = true;
+  }
+
+  // PreLoad
+  if ((currentMillis - PreLoadStartTime >= PreLoadDelay) || PreLoadStartTime == 0) {
+    preLoad = true;
+  }
 }
 
 // Update LED
@@ -214,6 +220,7 @@ void loop() {
       lightTest = true;
     }
     updateLights();
+    updateStates();
     // Zet keyboard aan
     if (!keyboardState) {
       Serial.begin(9600);
