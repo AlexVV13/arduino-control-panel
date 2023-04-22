@@ -40,7 +40,11 @@ unsigned long PreLoadStartTime = 0;
 unsigned long currentMillis;
 unsigned long previousBlinkMillis = 0;
 const long blinkInterval = 500; // led interval, 25ms is fury, 500 is normaal
+const long errorInterval = 250; // led interval error
+const long fncInterval = 500; // interval functie
 int ledState = LOW; // Led begint altijd uit
+int errorLed = LOW;
+int fncLed = LOW;
  
 void setup() {
   // Pins knopjes
@@ -207,12 +211,6 @@ void updateLights() {
       ledState = LOW;
     }
   }
-  // Knipperende LED functie
-  if (preLoad && !estopped) {
-    digitalWrite(functionl, ledState);
-  } else {
-    digitalWrite(functionl, LOW);
-  }
   // Knipperende LED dispatch
   if (canDispatch) {
     digitalWrite(dis1l, ledState);
@@ -221,11 +219,39 @@ void updateLights() {
     digitalWrite(dis1l, LOW);
     digitalWrite(dis2l, LOW);
   }
+}
+
+void updateErrorLight() {
+  if (currentMillis - previousBlinkMillis >= errorInterval) {
+    previousBlinkMillis = currentMillis;
+    if (errorLed == LOW) {
+      errorLed = HIGH;
+    } else {
+      errorLed = LOW;
+    }
+  }
   // Knipperende LED reset -- Enkelt bij fault, estop gaat vanzelf en brandt CONSTANT
   if (systemError) {
     digitalWrite(resetl, ledState);
   } else {
     digitalWrite(resetl, LOW);
+  }
+}
+
+void updateFNCLight() {
+  if (currentMillis - previousBlinkMillis >= fncInterval) {
+    previousBlinkMillis = currentMillis;
+    if (fncLed == LOW) {
+      fncLed = HIGH;
+    } else {
+      fncLed = LOW;
+    }
+  }
+  // Knipperende LED functie
+  if (preLoad && !estopped) {
+    digitalWrite(functionl, ledState);
+  } else {
+    digitalWrite(functionl, LOW);
   }
 }
  
@@ -247,6 +273,8 @@ void loop() {
       lightTest = true;
     }
     updateLights();
+    updateErrorLight();
+    updateFNCLight();
     updateStates();
     // Zet keyboard aan
     if (!keyboardState) {
