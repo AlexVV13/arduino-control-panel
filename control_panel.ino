@@ -172,12 +172,17 @@ void updateLights() {
   } else {
     digitalWrite(functionl, LOW);
   }
-  if (canDispatch && !resOpen && !gatesOpen && !estopped && trainParked) {
+  if (canDispatch && !resOpen && !gatesOpen && !estopped && trainParked && !systemError) {
     digitalWrite(dis1l, ledState);
     digitalWrite(dis2l, ledState);
   } else {
     digitalWrite(dis1l, LOW);
     digitalWrite(dis2l, LOW);
+  }
+  if (systemError) {
+    digitalWrite(resetl, ledState);
+  } else {
+    digitalWrite(resetl, LOW);
   }
 }
  
