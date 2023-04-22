@@ -28,11 +28,11 @@ bool keyboardState = false;
 bool preLoad = true; // In principe zou je vanaf het begin meteen moeten kunnen preloaden
  
 // Dispatch
-const long DispatchDelay = 5000;
+const long DispatchDelay = 10000;
 unsigned long DispatchStartTime = 0;
 
 // PreLoad
-const long PreLoadDelay = 5000;
+const long PreLoadDelay = 10000;
 unsigned long PreLoadStartTime = 0;
  
 // Ledjes
