@@ -122,36 +122,52 @@ void functie() {
  
 // Poortjes
 void openGates() {
-  Serial.write("OPEN GATES\n");
-  Keyboard.press(KEY_RIGHT_ARROW);
-  gatesOpen = true;
-  delay(2000);
-  Keyboard.releaseAll();
+  if (enableStationCTRL) {
+    Serial.write("OPEN GATES\n");
+    Keyboard.press(KEY_RIGHT_ARROW);
+    gatesOpen = true;
+    delay(2000);
+    Keyboard.releaseAll();
+  } else {
+    systemError = true;
+  }
 }
  
 void closeGates() {
-  Serial.write("CLOSE GATES\n");
-  Keyboard.press(KEY_LEFT_ARROW);
-  gatesOpen = false;
-  delay(2000);
-  Keyboard.releaseAll();
+  if (enableStationCTRL) {
+    Serial.write("CLOSE GATES\n");
+    Keyboard.press(KEY_LEFT_ARROW);
+    gatesOpen = false;
+    delay(2000);
+    Keyboard.releaseAll();
+  } else {
+    systemError = true;
+  }
 }
  
 // Beugels
 void openRestraints() {
-  Serial.write("OPEN RESTRAINTS\n");
-  Keyboard.press(KEY_UP_ARROW);
-  resOpen = true;
-  delay(1000);
-  Keyboard.releaseAll();
+  if (enableStationCTRL) {
+    Serial.write("OPEN RESTRAINTS\n");
+    Keyboard.press(KEY_UP_ARROW);
+    resOpen = true;
+    delay(1000);
+    Keyboard.releaseAll();
+  } else {
+    systemError = true;
+  }
 }
  
 void closeRestraints() {
-  Serial.write("CLOSE RESTRAINTS\n");
-  Keyboard.press(KEY_DOWN_ARROW);
-  resOpen = false;
-  delay(1000);
-  Keyboard.releaseAll();
+  if (enableStationCTRL) {
+    Serial.write("CLOSE RESTRAINTS\n");
+    Keyboard.press(KEY_DOWN_ARROW);
+    resOpen = false;
+    delay(1000);
+    Keyboard.releaseAll();
+  } else {
+    systemError = true;
+  }
 }
 
 // Controleer de statussen van de knoppen, en zet timers na vrijgaves en functiekeys
@@ -261,16 +277,12 @@ void loop() {
   if (digitalRead(gates) == HIGH) {
     if (gatesOpen == false && trainParked) {
       openGates();
-    } else if (!enableStationCTRL) {
-      systemError = true;
     }
   }
  
   if (digitalRead(gates) == LOW) {
     if (gatesOpen == true && trainParked) {
       closeGates();
-    } else if (!enableStationCTRL) {
-      systemError = true;
     }
   }
  
@@ -278,16 +290,12 @@ void loop() {
   if (digitalRead(restraints) == HIGH) {
     if (resOpen == false && trainParked) {
       openRestraints();
-    } else if (!enableStationCTRL) {
-      systemError = true;
     }
   }
  
   if (digitalRead(restraints) == LOW) {
     if (resOpen == true && trainParked) {
       closeRestraints();
-    } else if (!enableStationCTRL) {
-      systemError = true;
     }
   }
  
